@@ -19,6 +19,7 @@
  */
 package hudson.plugins.sonar.client;
 
+import hudson.plugins.sonar.utils.Logger;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import javax.annotation.CheckForNull;
@@ -79,7 +80,9 @@ public class WsClient {
   }
 
   public String getServerVersion() {
-    return client.getHttp(serverUrl + API_VERSION, null);
+    Logger.LOG.info("Using special build Carpe Data plugin...");
+    return "8.0.0.44909";
+    //return client.getHttp(serverUrl + API_VERSION, null);
   }
 
   private static String encode(String param) {

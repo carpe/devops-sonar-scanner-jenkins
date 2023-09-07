@@ -19,8 +19,21 @@
  */
 package hudson.plugins.sonar.client;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.sonarqube.ws.client.HttpException;
+
 import okhttp3.Call;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -29,17 +42,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.sonarqube.ws.client.HttpException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class HttpClientTest {
   private static final String URL = "http://sonarqube.org";
@@ -49,7 +51,7 @@ public class HttpClientTest {
   BufferedSource source = mock(BufferedSource.class);
   HttpClient underTest = new HttpClient(okHttpClient);
   Request request = new Request.Builder().url(URL).build();
-  Response response = new Response.Builder().code(200).body(body).protocol(Protocol.HTTP_2).request(request).build();
+  Response response = new Response.Builder().code(200).body(body).protocol(Protocol.HTTP_2).request(request).message("foo").build();
 
   @Before
   public void setUp() throws IOException {
@@ -72,7 +74,7 @@ public class HttpClientTest {
 
   @Test
   public void request_fail_should_throw_http_exception() throws IOException {
-    Response failedResponse = new Response.Builder().code(401).body(body).protocol(Protocol.HTTP_2).request(request).build();
+    Response failedResponse = new Response.Builder().code(401).body(body).protocol(Protocol.HTTP_2).request(request).message("foo").build();
     when(call.execute()).thenReturn(failedResponse);
 
     assertThatThrownBy(() -> underTest.getHttp(URL, null))

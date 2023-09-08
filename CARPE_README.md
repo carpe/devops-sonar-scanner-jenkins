@@ -34,7 +34,7 @@ VERSION="2.15.6"
 aws s3 cp target/sonar.hpi s3://carpe-jenkins/plugins/${VERSION}/sonar.hpi
 ```
 
-After publishing the plugin, you will need to go to the Jenkins project and [change the location in S3 that the plugin is being pulled from](https://github.com/carpe/devops-jenkins/blob/master/ami-creation/jenkins-controller/files/jenkins-startup.sh) to match the version that you just published.
+After publishing the plugin, you will need to go to the Jenkins project and [change the location in S3 that the plugin is being pulled from](https://github.com/carpe/devops-jenkins/blob/d0d2d689daac5e671c1599ed9bfc2beb89ed46ed/ami-creation/jenkins-controller/files/configure-jenkins.sh#L50-L51) to match the version that you just published.
 You can then create a new AMI to make sure that the next Jenkins you deploy will have this plugin in it.
 
 ## Testing
